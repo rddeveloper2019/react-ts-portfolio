@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import { useEffect, useRef, useState } from "react";
 import * as esbuild from "esbuild-wasm";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
+import { fetchPlugin } from "./plugins/fetch-plugin";
 
 const el = document.getElementById("root");
 
@@ -15,7 +16,7 @@ const App = () => {
   const initService = async () => {
     const service = await esbuild.startService({
       worker: true,
-      wasmURL: "/esbuild.wasm",
+      wasmURL: "https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm",
     });
 
     serviceRef.current = service;
@@ -34,7 +35,7 @@ const App = () => {
       entryPoints: ["index.js"],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()],
+      plugins: [unpkgPathPlugin(), fetchPlugin(input)],
       define: { "process.env.NODE_ENV": "production", global: "window" },
     });
 
@@ -46,6 +47,8 @@ const App = () => {
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        rows={20}
+        cols={80}
       ></textarea>
       <div>
         <button onClick={onCLick}>Submit</button>
