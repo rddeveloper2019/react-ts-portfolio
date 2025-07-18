@@ -4,14 +4,45 @@ import * as esbuild from "esbuild-wasm";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 import { fetchPlugin } from "./plugins/fetch-plugin";
 
+interface ExtendedHTMLIFrameElement extends HTMLIFrameElement {
+  contentWindow: Window;
+}
+
 const el = document.getElementById("root");
 
 const root = ReactDOM.createRoot(el!);
 
+const html = `
+  <html>
+      <head>
+        <title>Document</title>
+      </head>
+      <body>
+        <div id="root"></div>
+        <script>
+          window.addEventListener(
+            "message",
+            ({ data }) => {
+              try {
+                eval(data);
+              } catch (error) {
+                const root = document.querySelector("#root");
+                root.innerHTML = '<div style="color: red;"><h4>Runtime error:</h4>' + error + '</div>';
+                console.error(error);
+              }
+            },
+            false
+          );
+        </script>
+      </body>
+  </html>
+
+`;
+
 const App = () => {
   const [input, setInput] = useState("");
-  const [code, setCode] = useState("");
   const serviceRef = useRef<esbuild.Service | null>(null);
+  const iframeRef = useRef<ExtendedHTMLIFrameElement>(null);
 
   const initService = async () => {
     const service = await esbuild.startService({
@@ -31,15 +62,26 @@ const App = () => {
       return;
     }
 
+    if (iframeRef.current) {
+      iframeRef.current.srcdoc = html;
+    }
+
     const output = await serviceRef.current.build({
       entryPoints: ["index.js"],
       bundle: true,
       write: false,
       plugins: [unpkgPathPlugin(), fetchPlugin(input)],
-      define: { "process.env.NODE_ENV": "production", global: "window" },
+      define: {
+        ["process.env.NODE_ENV"]: `"production"`,
+        ["global"]: `"window"`,
+        ["production"]: `"production"`,
+      },
     });
 
-    setCode(output.outputFiles[0].text);
+    const code = output.outputFiles[0].text;
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow?.postMessage?.(code, "*");
+    }
   };
 
   return (
@@ -53,7 +95,12 @@ const App = () => {
       <div>
         <button onClick={onCLick}>Submit</button>
       </div>
-      <pre>{code}</pre>
+      <iframe
+        title="preview"
+        srcDoc={html}
+        sandbox="allow-scripts"
+        ref={iframeRef}
+      ></iframe>
     </div>
   );
 };
