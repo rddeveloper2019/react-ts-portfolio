@@ -58,10 +58,8 @@ export const Editor = ({ onChange, initialValue = "" }: EditorProps) => {
     };
   }, []);
 
-  const handleChange = (value: string | undefined) => {
-    if (value) {
-      onChange(value);
-    }
+  const handleChange = (value = "") => {
+    onChange(value);
   };
 
   const handleFormatClick = async () => {

@@ -15,9 +15,14 @@ export const CodeCell = () => {
   useEffect(() => {
     clearTimeout(timer);
     timer = setTimeout(async () => {
-      const result = await bundle(input);
-      setCode(result.code);
-      setError(result.error.message);
+      if (input) {
+        const result = await bundle(input);
+        setCode(result.code);
+        setError(result.error.message);
+      } else {
+        setCode("");
+        setError("");
+      }
     }, 400);
 
     return () => {
