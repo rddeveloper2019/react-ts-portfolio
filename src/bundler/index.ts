@@ -25,8 +25,8 @@ export const bundle = async (rawCode: string) => {
       },
     });
 
-    return output.outputFiles[0].text;
+    return { code: output.outputFiles[0].text, error: "" };
   } catch (error: any) {
-    return error?.message;
+    return { code: "", error: error };
   }
 };

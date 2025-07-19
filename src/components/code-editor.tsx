@@ -13,7 +13,7 @@ import MonacoJSXHighlighter from "monaco-jsx-highlighter";
 const babelParse = (code: string) =>
   parse(code, {
     sourceType: "module",
-    plugins: ["jsx"],
+    plugins: ["jsx", "decorators", "decorators-legacy"],
   });
 
 interface EditorProps {

@@ -10,22 +10,20 @@ let timer: NodeJS.Timer;
 export const CodeCell = () => {
   const [input, setInput] = useState("");
   const [code, setCode] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     clearTimeout(timer);
     timer = setTimeout(async () => {
       const result = await bundle(input);
-      setCode(result);
+      setCode(result.code);
+      setError(result.error.message);
     }, 400);
 
     return () => {
       clearTimeout(timer);
     };
   }, [input]);
-  const onCLick = async () => {
-    const result = await bundle(input);
-    setCode(result);
-  };
 
   return (
     <Resizable direction={Direction.vertical}>
@@ -34,7 +32,7 @@ export const CodeCell = () => {
           <Editor onChange={setInput} />
         </Resizable>
 
-        <Preview code={code} />
+        <Preview code={code} error={error} />
       </div>
     </Resizable>
   );

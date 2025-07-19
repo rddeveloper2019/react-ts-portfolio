@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 
 interface PreviewProps {
   code: string;
+  error: string;
 }
 
 interface ExtendedHTMLIFrameElement extends HTMLIFrameElement {
@@ -18,15 +19,23 @@ const html = `
       <body>
         <div id="root"></div>
         <script>
+          const handlError = (error) => {
+            const root = document.querySelector("#root");
+            root.innerHTML = '<div style="color: red;"><h4>Runtime error:</h4>' + error + '</div>';
+          }
+
+          window.addEventListener('error', (event) => {
+            event.preventDefault()
+            handlError(event.error)
+          })
+
           window.addEventListener(
             "message",
             ({ data }) => {
               try {
                 eval(data);
               } catch (error) {
-                const root = document.querySelector("#root");
-                root.innerHTML = '<div style="color: red;"><h4>Runtime error:</h4>' + error + '</div>';
-                console.error(error);
+                handlError(error)
               }
             },
             false
@@ -36,7 +45,7 @@ const html = `
   </html>
 `;
 
-export const Preview = ({ code }: PreviewProps) => {
+export const Preview = ({ code, error }: PreviewProps) => {
   const iframeRef = useRef<ExtendedHTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -58,6 +67,12 @@ export const Preview = ({ code }: PreviewProps) => {
         srcDoc={html}
         sandbox="allow-scripts"
       />
+      {error && (
+        <div className="preview-error">
+          <h4>Compilation error:</h4>
+          {error}
+        </div>
+      )}
     </div>
   );
 };
