@@ -98,7 +98,7 @@ export const Editor = ({ onChange, initialValue = "" }: EditorProps) => {
       </button>
       <MonacoEditor
         defaultValue={initialValue}
-        height="500px"
+        height="100%"
         language="javascript"
         theme="vs-dark"
         options={{

@@ -13,3 +13,5 @@ declare module "monaco-jsx-highlighter" {
   }
   export = MonacoJSXHighlighter;
 }
+
+declare module "react-resizable";

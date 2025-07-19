@@ -1,3 +1,4 @@
+import "./preview.css";
 import { useEffect, useRef } from "react";
 
 interface PreviewProps {
@@ -11,6 +12,7 @@ interface ExtendedHTMLIFrameElement extends HTMLIFrameElement {
 const html = `
   <html>
       <head>
+        <style>html {background-color: white;}</style>
         <title>Document</title>
       </head>
       <body>
@@ -40,16 +42,22 @@ export const Preview = ({ code }: PreviewProps) => {
   useEffect(() => {
     if (iframeRef.current) {
       iframeRef.current.srcdoc = html;
-      iframeRef.current.contentWindow?.postMessage?.(code, "*");
+      setTimeout(() => {
+        if (iframeRef.current) {
+          iframeRef.current.contentWindow?.postMessage?.(code, "*");
+        }
+      }, 50);
     }
   }, [code]);
 
   return (
-    <iframe
-      ref={iframeRef}
-      title="preview"
-      srcDoc={html}
-      sandbox="allow-scripts"
-    />
+    <div className="preview-wrapper">
+      <iframe
+        ref={iframeRef}
+        title="preview"
+        srcDoc={html}
+        sandbox="allow-scripts"
+      />
+    </div>
   );
 };

@@ -1,0 +1,61 @@
+/* Базовые стили для ручек ресайза */
+.react-resizable-handle {
+  position: absolute;
+  background-color: #37414b;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-color 0.2s;
+  z-index: 10;
+}
+
+.react-resizable-handle:hover {
+  background-color: #4a5664;
+}
+
+.react-resizable-handle:active {
+  background-color: #5d6b7c;
+}
+
+/* Вертикальная ручка (east) */
+.react-resizable-handle-e {
+  width: 10px;
+  min-width: 10px;
+  height: 100%;
+  cursor: col-resize;
+  right: -5px;
+  top: 0;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+}
+
+/* Горизонтальная ручка (south) */
+.react-resizable-handle-s {
+  height: 10px;
+  width: 100%;
+  cursor: row-resize;
+  bottom: -5px;
+  left: 0;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=");
+}
+
+/* Контейнеры */
+.resize-horizontal {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.resize-vertical {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Дополнительные стили для контента */
+.react-resizable {
+  position: relative;
+}
+.react-resizable-content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
