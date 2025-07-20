@@ -1,7 +1,5 @@
 import "./resizable.css";
 import { PropsWithChildren, SyntheticEvent, useEffect, useState } from "react";
-import { ResizeCallbackData } from "react-resizable";
-import { ResizableBoxProps } from "react-resizable";
 import { ResizableBox } from "react-resizable";
 
 export enum Direction {

@@ -37,7 +37,7 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
     case ActionType.MOVE_CELL: {
       const { id, direction } = action.payload;
       const index = state.order.findIndex((ord) => ord === id);
-      const targetIndex = direction === "up" ? index + 1 : index - 1;
+      const targetIndex = direction === "up" ? index - 1 : index + 1;
 
       if (targetIndex < 0 || targetIndex > state.order.length - 1) {
         return;
@@ -50,11 +50,11 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
 
     case ActionType.INSERT_CELL_BEFORE: {
       const { id, type } = action.payload;
-      console.log({ id, type });
       const cell: Cell = {
         id: randomId(),
         type,
         content: "",
+        color: randomColor(),
       };
 
       state.data[cell.id] = cell;
@@ -77,6 +77,15 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
 
 const randomId = (): string => {
   return Math.random().toString(36).substring(2, 5);
+};
+
+const randomColor = (): string => {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 };
 
 export default reducer;

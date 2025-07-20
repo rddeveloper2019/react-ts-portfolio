@@ -38,6 +38,8 @@
 .text-editor .w-md-editor-toolbar {
   background-color: #b6b7b8;
   border-bottom: 1px solid gray;
+  justify-content: flex-start;
+  gap: 20px;
 }
 
 .text-editor .w-md-editor-toolbar li button {
@@ -70,4 +72,9 @@
 }
 .w-md-editor-preview .wmde-markdown.wmde-markdown-color {
   color: unset !important;
+}
+
+.text-editor-default * {
+  background-color: transparent !important;
+  color: #ffffff !important;
 }

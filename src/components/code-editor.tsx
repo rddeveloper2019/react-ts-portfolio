@@ -54,7 +54,7 @@ export const Editor = ({ onChange, initialValue = "" }: EditorProps) => {
 
   useEffect(() => {
     return () => {
-      highlighterRef.current?.dispose();
+      highlighterRef.current?.dispose?.();
     };
   }, []);
 

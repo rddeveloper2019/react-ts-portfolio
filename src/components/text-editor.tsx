@@ -1,11 +1,17 @@
 import "./text-editor.css";
 import MDEditor from "@uiw/react-md-editor/nohighlight";
 import { useEffect, useRef, useState } from "react";
+import { Cell } from "../state";
+import { useActions } from "../hooks/use-actions";
 
-export const TextEditor = () => {
-  const [value, setValue] = useState<string | undefined>();
+interface TextEditorProps {
+  cell: Cell;
+}
+
+export const TextEditor = ({ cell }: TextEditorProps) => {
   const [editing, setEditing] = useState(false);
   const editorRef = useRef<HTMLDivElement | null>(null);
+  const { updateCell } = useActions();
 
   useEffect(() => {
     const listener = (event: MouseEvent) => {
@@ -32,8 +38,8 @@ export const TextEditor = () => {
       <div ref={editorRef}>
         <MDEditor
           className="text-editor"
-          value={value}
-          onChange={setValue}
+          value={cell.content}
+          onChange={(value = "") => updateCell(cell.id, value)}
           style={{ minHeight: 200 }}
         />
       </div>
@@ -41,11 +47,14 @@ export const TextEditor = () => {
   }
 
   return (
-    <div onClick={() => setEditing(true)} className="text-editor">
+    <div
+      onClick={() => setEditing(true)}
+      className={`text-editor ${!editing ? "text-editor-default" : ""}`}
+    >
       <div className="preview-card">
         <MDEditor.Markdown
-          source={value}
-          style={{ minHeight: 200, padding: 25 }}
+          source={cell.content || "Click to edit"}
+          style={{ padding: 25 }}
         />
       </div>
     </div>

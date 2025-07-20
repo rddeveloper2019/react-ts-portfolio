@@ -1,11 +1,5 @@
 import esbuild from "esbuild-wasm";
-
 import { PluginBuild } from "esbuild-wasm";
-import localForage from "localforage";
-
-const fileCache = localForage.createInstance({
-  name: "filecache",
-});
 
 export const unpkgPathPlugin = () => {
   return {

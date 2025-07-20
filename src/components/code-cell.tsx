@@ -5,18 +5,26 @@ import { Editor } from "../components/code-editor";
 import { Preview } from "../components/preview";
 import { bundle } from "../bundler";
 import { Direction, Resizable } from "./resizable";
+import { Cell } from "../state";
+import { useActions } from "../hooks/use-actions";
 
 let timer: NodeJS.Timer;
-export const CodeCell = () => {
-  const [input, setInput] = useState("");
+
+interface CodeCellProps {
+  cell: Cell;
+}
+
+export const CodeCell = ({ cell }: CodeCellProps) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
+
+  const { updateCell } = useActions();
 
   useEffect(() => {
     clearTimeout(timer);
     timer = setTimeout(async () => {
-      if (input) {
-        const result = await bundle(input);
+      if (cell.content) {
+        const result = await bundle(cell.content);
         setCode(result.code);
         setError(result.error.message);
       } else {
@@ -28,13 +36,16 @@ export const CodeCell = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, [input]);
+  }, [cell.content]);
 
   return (
     <Resizable direction={Direction.vertical}>
       <div style={{ height: "100%", display: "flex", flexDirection: "row" }}>
         <Resizable direction={Direction.horizontal}>
-          <Editor onChange={setInput} />
+          <Editor
+            onChange={(value) => updateCell(cell.id, value)}
+            initialValue={cell.content}
+          />
         </Resizable>
 
         <Preview code={code} error={error} />
