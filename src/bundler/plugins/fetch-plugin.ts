@@ -67,7 +67,6 @@ export const fetchPlugin = (input: string) => {
         async (args: OnLoadArgs): Promise<Partial<OnLoadResult>> => {
           const {
             data = "",
-            config,
             // @ts-ignore
             request,
           } = await axios.get<string | undefined>(args.path);
