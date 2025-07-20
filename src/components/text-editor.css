@@ -42,6 +42,7 @@
 
 .text-editor .w-md-editor-toolbar li button {
   color: #303030;
+  scale: 1.3;
 }
 
 .text-editor .w-md-editor-content {

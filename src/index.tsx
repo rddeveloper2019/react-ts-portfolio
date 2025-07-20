@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(el!);
 const App = () => {
   return (
     <div>
-      {/* <CodeCell /> */}
+      <CodeCell />
       <TextEditor />
     </div>
   );
